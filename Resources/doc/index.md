@@ -19,6 +19,7 @@ Welcome to the ElasticsearchBundle, the modern solution to work with [Elasticsea
 * [How to search the index](search.md)
 * [Scan through the index](scan.md)
 * [Parsing the results](results_parsing.md)
+* [Authentication & fine-grained access (API keys)](security.md)
 
 ## How to install
 
