@@ -21,6 +21,7 @@ use ONGR\ElasticsearchBundle\Test\AbstractElasticsearchTestCase;
  */
 class ManagerTest extends AbstractElasticsearchTestCase
 {
+    #[\Override]
     protected function getDataArray(): array
     {
         return [

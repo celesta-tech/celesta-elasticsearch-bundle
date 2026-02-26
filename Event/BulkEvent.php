@@ -15,15 +15,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class BulkEvent extends Event
 {
-    private $operation;
-    private $header;
-    private $data;
-
-    public function __construct(string $operation, array $header, array $data = [])
+    public function __construct(private string $operation, private array $header, private array $data = [])
     {
-        $this->operation = $operation;
-        $this->header = $header;
-        $this->data = $data;
     }
 
     public function getHeader(): array

@@ -24,6 +24,7 @@ class ElasticsearchProfilerTest extends AbstractElasticsearchTestCase
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getDataArray(): array
     {
         return [
@@ -111,7 +112,7 @@ class ElasticsearchProfilerTest extends AbstractElasticsearchTestCase
         $lastQuery = end($queries[ElasticsearchProfiler::UNDEFINED_ROUTE]);
         $this->checkQueryParameters($lastQuery);
 
-        $lastQuery['body'] = trim(preg_replace('/\s+/', '', $lastQuery['body']));
+        $lastQuery['body'] = trim((string) preg_replace('/\s+/', '', (string) $lastQuery['body']));
 
         $this->assertEquals(
             [
@@ -159,7 +160,7 @@ class ElasticsearchProfilerTest extends AbstractElasticsearchTestCase
         $queries = $this->getCollector()->getQueries();
         $lastQuery = end($queries[ElasticsearchProfiler::UNDEFINED_ROUTE]);
         $this->checkQueryParameters($lastQuery);
-        $lastQuery['body'] = trim(preg_replace('/\s+/', '', $lastQuery['body']));
+        $lastQuery['body'] = trim((string) preg_replace('/\s+/', '', (string) $lastQuery['body']));
 
         $this->assertEquals('{"aggregations":{"g":{"global":{}}}}', $lastQuery['body']);
     }

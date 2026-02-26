@@ -22,6 +22,7 @@ class CacheClearCommand extends AbstractIndexServiceAwareCommand
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function configure()
     {
         parent::configure();

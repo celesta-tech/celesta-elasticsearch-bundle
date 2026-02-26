@@ -41,7 +41,7 @@ class ElasticsearchBundleTest extends \PHPUnit\Framework\TestCase
         /** @var PassConfig $passConfig */
         $passConfig = $container->getCompiler()->getPassConfig();
         foreach ($passConfig->getPasses() as $pass) {
-            $classPath = explode('\\', get_class($pass));
+            $classPath = explode('\\', $pass::class);
             $loadedPasses[] = end($classPath);
         }
 

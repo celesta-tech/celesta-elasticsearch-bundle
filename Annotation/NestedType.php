@@ -17,5 +17,5 @@ namespace ONGR\ElasticsearchBundle\Annotation;
  */
 final class NestedType extends AbstractAnnotation
 {
-    const TYPE = 'nested';
+    const string TYPE = 'nested';
 }

@@ -20,6 +20,7 @@ class IndexDropCommand extends AbstractIndexServiceAwareCommand
 {
     const NAME = 'ongr:es:index:drop';
 
+    #[\Override]
     protected function configure()
     {
         parent::configure();

@@ -81,7 +81,7 @@ class AggregationValueTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(2, $buckets);
 
         foreach ($buckets as $bucket) {
-            $this->assertInstanceOf('\ONGR\ElasticsearchBundle\Result\Aggregation\AggregationValue', $bucket);
+            $this->assertInstanceOf(\ONGR\ElasticsearchBundle\Result\Aggregation\AggregationValue::class, $bucket);
         }
     }
 
@@ -102,7 +102,7 @@ class AggregationValueTest extends \PHPUnit\Framework\TestCase
         $agg = new AggregationValue($this->getSampleResponse()['buckets'][0]);
 
         $this->assertInstanceOf(
-            '\ONGR\ElasticsearchBundle\Result\Aggregation\AggregationValue',
+            \ONGR\ElasticsearchBundle\Result\Aggregation\AggregationValue::class,
             $agg->getAggregation('avg_price')
         );
     }
@@ -192,7 +192,7 @@ class AggregationValueTest extends \PHPUnit\Framework\TestCase
 
         foreach ($agg as $bucket) {
             $buckets[] = $bucket;
-            $this->assertInstanceOf('\ONGR\ElasticsearchBundle\Result\Aggregation\AggregationValue', $bucket);
+            $this->assertInstanceOf(\ONGR\ElasticsearchBundle\Result\Aggregation\AggregationValue::class, $bucket);
         }
 
         $this->assertCount(2, $buckets);

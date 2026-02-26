@@ -28,20 +28,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class JsonReader implements \Countable, \Iterator
 {
-    private $filename;
     private $handle;
     private $key = 0;
     private $currentLine;
     private $metadata;
-    private $index;
     private $optionsResolver;
-    private $options;
 
-    public function __construct(IndexService $index, string $filename, array $options = [])
+    public function __construct(private readonly IndexService $index, private readonly string $filename, private readonly array $options = [])
     {
-        $this->index = $index;
-        $this->filename = $filename;
-        $this->options = $options;
     }
 
     /**

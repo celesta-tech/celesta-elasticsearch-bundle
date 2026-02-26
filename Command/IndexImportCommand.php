@@ -24,6 +24,7 @@ class IndexImportCommand extends AbstractIndexServiceAwareCommand
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function configure()
     {
         parent::configure();

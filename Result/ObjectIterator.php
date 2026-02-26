@@ -20,15 +20,11 @@ use ONGR\ElasticsearchBundle\Mapping\Converter;
  */
 class ObjectIterator extends AbstractLazyCollection
 {
-    private $converter;
     protected $collection;
-    private $namespace;
 
-    public function __construct(string $namespace, array $array, Converter $converter)
+    public function __construct(private readonly string $namespace, array $array, private readonly Converter $converter)
     {
-        $this->converter = $converter;
         $this->collection = new ArrayCollection($array);
-        $this->namespace = $namespace;
     }
 
     protected function convertDocument(array $data)
@@ -38,8 +34,6 @@ class ObjectIterator extends AbstractLazyCollection
 
     protected function doInitialize()
     {
-        $this->collection = $this->collection->map(function ($rawObject) {
-            return $this->convertDocument($rawObject);
-        });
+        $this->collection = $this->collection->map(fn($rawObject) => $this->convertDocument($rawObject));
     }
 }

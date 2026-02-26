@@ -15,15 +15,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class CommitEvent extends Event
 {
-    private $commitMode;
-    private $bulkQuery;
-    private $bulkResponse;
-
-    public function __construct(string $commitMode, array $bulkQuery = [], array $bulkResponse = [])
+    public function __construct(private string $commitMode, private array $bulkQuery = [], private array $bulkResponse = [])
     {
-        $this->commitMode = $commitMode;
-        $this->bulkQuery = $bulkQuery;
-        $this->bulkResponse = $bulkResponse;
     }
 
     public function getCommitMode()

@@ -164,8 +164,8 @@ class MappingPass implements CompilerPassInterface
     {
         $lines = preg_grep('/^namespace /', file($filename));
         $namespaceLine = array_shift($lines);
-        $match = array();
-        preg_match('/^namespace (.*);$/', $namespaceLine, $match);
+        $match = [];
+        preg_match('/^namespace (.*);$/', (string) $namespaceLine, $match);
         $fullNamespace = array_pop($match);
 
         return $fullNamespace;
@@ -173,7 +173,7 @@ class MappingPass implements CompilerPassInterface
 
     private function getClassname($filename)
     {
-        $directoriesAndFilename = explode('/', $filename);
+        $directoriesAndFilename = explode('/', (string) $filename);
         $filename = array_pop($directoriesAndFilename);
         $nameAndExtension = explode('.', $filename);
         $className = array_shift($nameAndExtension);

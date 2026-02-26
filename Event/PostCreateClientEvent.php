@@ -16,13 +16,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class PostCreateClientEvent extends Event
 {
-    private $namespace;
-    private $client;
-
-    public function __construct(string $namespace, ClientBuilder $client)
+    public function __construct(private string $namespace, private ClientBuilder $client)
     {
-        $this->namespace = $namespace;
-        $this->client = $client;
     }
 
     public function getNamespace(): string

@@ -73,10 +73,10 @@ abstract class AbstractElasticsearchTestCase extends WebTestCase
     {
         parent::tearDown();
         self::$cachedContainer = null;
-        foreach ($this->indexes as $name => $index) {
+        foreach ($this->indexes as $index) {
             try {
                 $index->dropIndex();
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 // Do nothing.
             }
         }
