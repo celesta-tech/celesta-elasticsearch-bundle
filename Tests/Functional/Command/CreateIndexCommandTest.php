@@ -40,7 +40,7 @@ class CreateIndexCommandTest extends AbstractElasticsearchTestCase
             $index->getIndexName()
         );
 
-        $this->assertRegExp($expectedOutput, $commandTester->getDisplay());
+        $this->assertMatchesRegularExpression($expectedOutput, $commandTester->getDisplay());
     }
 
     public function testIndexCreateWhenThereIsNoIndex()
@@ -153,7 +153,7 @@ class CreateIndexCommandTest extends AbstractElasticsearchTestCase
             ]
         );
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             json_encode(
                 $index->getIndexSettings()->getIndexMetadata(),
                 JSON_PRETTY_PRINT

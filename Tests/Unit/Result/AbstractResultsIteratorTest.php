@@ -100,12 +100,12 @@ class AbstractResultsIteratorTest extends TestCase
 
     /**
      * Test for getDocumentScore() in case called when current iterator value is not valid.
-     *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Document score is available only while iterating over results
      */
     public function testGetScoreException()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Document score is available only while iterating over results');
+
         $index = $this->getMockBuilder(IndexService::class)
             ->disableOriginalConstructor()
             ->getMock();

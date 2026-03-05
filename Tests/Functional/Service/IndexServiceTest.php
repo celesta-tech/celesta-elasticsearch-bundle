@@ -118,7 +118,8 @@ class ManagerTest extends AbstractElasticsearchTestCase
     {
         $index = $this->getIndex(DummyDocumentInTheEntityDirectory::class);
         $hosts = $index->getIndexSettings()->getHosts();
+        $expectedHost = $_ENV['ELASTICSEARCH_HOST'] ?? $_SERVER['ELASTICSEARCH_HOST'] ?? 'localhost:9200';
 
-        $this->assertEquals(['localhost:9200'], $hosts);
+        $this->assertEquals([$expectedHost], $hosts);
     }
 }

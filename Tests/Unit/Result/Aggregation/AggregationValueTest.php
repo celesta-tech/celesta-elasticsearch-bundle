@@ -160,24 +160,24 @@ class AggregationValueTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test if exception is thrown when trying to set value using array syntax.
-     *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage can not be changed on runtime
      */
     public function testOffsetSetException()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('can not be changed on runtime');
+
         $agg = new AggregationValue([]);
         $agg['foo'] = 'bar';
     }
 
     /**
      * Test if exception is thrown when trying to unset value using array syntax.
-     *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage can not be changed on runtime
      */
     public function testOffsetUnsetException()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('can not be changed on runtime');
+
         $agg = new AggregationValue([]);
         unset($agg['foo']);
     }

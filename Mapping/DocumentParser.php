@@ -131,18 +131,17 @@ class DocumentParser
             }
         }
 
-        //Embeded fields are option compared to the array or object mapping.
         if ($embeddedFields) {
-            $cacheItem = $this->cache->fetch(self::EMBEDDED_CACHED_FIELDS) ?? [];
+            $cacheItem = $this->cache->fetch(self::EMBEDDED_CACHED_FIELDS) ?: [];
             $cacheItem[$class->getName()] = $embeddedFields;
-            $t = $this->cache->save(self::EMBEDDED_CACHED_FIELDS, $cacheItem);
+            $this->cache->save(self::EMBEDDED_CACHED_FIELDS, $cacheItem);
         }
 
-        $cacheItem = $this->cache->fetch(self::ARRAY_CACHED_FIELDS) ?? [];
+        $cacheItem = $this->cache->fetch(self::ARRAY_CACHED_FIELDS) ?: [];
         $cacheItem[$class->getName()] = $arrayFields;
         $this->cache->save(self::ARRAY_CACHED_FIELDS, $cacheItem);
 
-        $cacheItem = $this->cache->fetch(self::OBJ_CACHED_FIELDS) ?? [];
+        $cacheItem = $this->cache->fetch(self::OBJ_CACHED_FIELDS) ?: [];
         $cacheItem[$class->getName()] = $objFields;
         $this->cache->save(self::OBJ_CACHED_FIELDS, $cacheItem);
 
