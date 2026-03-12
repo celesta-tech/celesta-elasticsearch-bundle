@@ -32,28 +32,18 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class IndexService
 {
     private $client;
-    private $namespace;
-    private $converter;
-    private $eventDispatcher;
 
     private $stopwatch;
     private $bulkCommitSize = 100;
     private $bulkQueries = [];
-    private $indexSettings = [];
-    private $tracer;
 
     public function __construct(
-        string $namespace,
-        Converter $converter,
-        EventDispatcherInterface $eventDispatcher,
-        IndexSettings $indexSettings,
-        $tracer = null
+        private readonly string $namespace,
+        private readonly Converter $converter,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private IndexSettings $indexSettings,
+        private $tracer = null
     ) {
-        $this->namespace = $namespace;
-        $this->converter = $converter;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->indexSettings = $indexSettings;
-        $this->tracer = $tracer;
         $this->getClient();
     }
 
@@ -157,7 +147,7 @@ class IndexService
             if ($this->indexExists()) {
                 $this->dropIndex();
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Do nothing, our target is to create the new index.
         }
 
@@ -433,10 +423,9 @@ class IndexService
      */
     public function persist($document): void
     {
-        $documentArray = array_filter($this->converter->convertDocumentToArray($document), function ($val) {
+        $documentArray = array_filter($this->converter->convertDocumentToArray($document), 
             // remove unset properties but keep other falsy values
-            return !($val === null);
-        });
+            fn($val) => !($val === null));
 
         $this->bulk('index', $documentArray);
     }

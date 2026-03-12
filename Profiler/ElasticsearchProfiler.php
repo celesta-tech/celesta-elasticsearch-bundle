@@ -40,7 +40,7 @@ class ElasticsearchProfiler implements DataCollectorInterface
         $this->indexes = $indexes;
     }
 
-    public function collect(Request $request, Response $response, \Throwable $exception = null): void
+    public function collect(Request $request, Response $response, ?\Throwable $exception = null): void
     {
         /** @var Logger $logger */
         foreach ($this->loggers as $logger) {
@@ -106,16 +106,16 @@ class ElasticsearchProfiler implements DataCollectorInterface
                 $this->time += $record['context']['duration'];
                 $this->addQuery($route, $record, $queryBody);
             } else {
-                $position = strpos($record['message'], ' -d');
-                $queryBody = $position !== false ? substr($record['message'], $position + 3) : '';
+                $position = strpos((string) $record['message'], ' -d');
+                $queryBody = $position !== false ? substr((string) $record['message'], $position + 3) : '';
             }
         }
     }
 
     private function addQuery($route, $record, $queryBody): void
     {
-        parse_str(parse_url($record['context']['uri'], PHP_URL_QUERY), $httpParameters);
-        $body = json_decode(trim($queryBody, " '\r\t\n"));
+        parse_str(parse_url((string) $record['context']['uri'], PHP_URL_QUERY), $httpParameters);
+        $body = json_decode(trim((string) $queryBody, " '\r\t\n"));
         $this->queries[$route][] = array_merge(
             [
                 'body' => $body !== null ? json_encode($body, JSON_PRETTY_PRINT) : '',
@@ -123,7 +123,7 @@ class ElasticsearchProfiler implements DataCollectorInterface
                 'httpParameters' => $httpParameters,
                 'time' => $record['context']['duration'] * 1000,
             ],
-            array_diff_key(parse_url($record['context']['uri']), array_flip(['query']))
+            array_diff_key(parse_url((string) $record['context']['uri']), array_flip(['query']))
         );
     }
 

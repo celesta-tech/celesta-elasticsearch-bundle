@@ -19,6 +19,7 @@ use ONGR\ElasticsearchBundle\Test\AbstractElasticsearchTestCase;
 
 class ObjectIteratorTest extends AbstractElasticsearchTestCase
 {
+    #[\Override]
     protected function getDataArray(): array
     {
         return [

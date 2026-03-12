@@ -36,7 +36,7 @@ class Converter
 
     public function convertDocumentToArray($document): array
     {
-        $class = get_class($document);
+        $class = $document::class;
 
         if (!isset($this->propertyMetadata[$class])) {
             throw new \Exception("Cannot convert object of class `$class` to array.");
@@ -51,7 +51,7 @@ class Converter
             return null;
         }
 
-        $metadata = $metadata ?? $this->propertyMetadata[get_class($document)];
+        $metadata ??= $this->propertyMetadata[$document::class];
         $result = [];
 
         foreach ($metadata as $field => $fieldMeta) {
@@ -111,7 +111,7 @@ class Converter
                     $object->{$fieldMeta['name']} = $value;
                 } else {
                     if ($fieldMeta['identifier']) {
-                        $setter = function ($field, $value) {
+                        $setter = function ($field, $value): void {
                             $this->$field = $value;
                         };
 

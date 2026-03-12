@@ -20,13 +20,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class AbstractIndexServiceAwareCommand extends Command
 {
-    private $container;
-
     const INDEX_OPTION = 'index';
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(private readonly ContainerInterface $container)
     {
-        $this->container = $container;
         parent::__construct();
     }
 
@@ -42,7 +39,7 @@ abstract class AbstractIndexServiceAwareCommand extends Command
 
     protected function getIndex($name): IndexService
     {
-        $name = $name ?? $this->container->getParameter(Configuration::ONGR_DEFAULT_INDEX);
+        $name ??= $this->container->getParameter(Configuration::ONGR_DEFAULT_INDEX);
         $indexes = $this->container->getParameter(Configuration::ONGR_INDEXES);
 
         if (isset($indexes[$name]) && $this->container->has($indexes[$name])) {

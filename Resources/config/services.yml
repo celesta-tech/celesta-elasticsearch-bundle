@@ -9,6 +9,8 @@ services:
 
     ONGR\ElasticsearchBundle\Command\:
         resource: '../../Command'
+        arguments:
+            $container: '@service_container'
         tags:
             - { name: console.command }
 
@@ -16,9 +18,12 @@ services:
         class: Doctrine\Common\Cache\PhpFileCache
         arguments: ["%kernel.cache_dir%/ongr/elasticsearch", ".ongr.data"]
 
+    ongr.esb.annotation_reader:
+        class: Doctrine\Common\Annotations\AnnotationReader
+
     ongr.esb.cache_reader:
         class: Doctrine\Common\Annotations\CachedReader
-        arguments: ["@annotations.reader", "@ongr.esb.cache", "%kernel.debug%"]
+        arguments: ["@ongr.esb.annotation_reader", "@ongr.esb.cache", "%kernel.debug%"]
 
     ONGR\ElasticsearchBundle\Service\ExportService: ~
     ONGR\ElasticsearchBundle\Service\ImportService: ~

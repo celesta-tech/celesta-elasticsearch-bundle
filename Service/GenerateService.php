@@ -26,20 +26,14 @@ class GenerateService
     private $generator;
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * Constructor
      *
      * @param DocumentGenerator $generator
      * @param Filesystem        $filesystem
      */
-    public function __construct(DocumentGenerator $generator, Filesystem $filesystem)
+    public function __construct(DocumentGenerator $generator, private readonly Filesystem $filesystem)
     {
         $this->generator = $generator;
-        $this->filesystem = $filesystem;
     }
 
     /**

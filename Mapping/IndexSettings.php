@@ -12,27 +12,8 @@ namespace ONGR\ElasticsearchBundle\Mapping;
 
 class IndexSettings
 {
-    private $namespace;
-    private $indexName;
-    private $alias;
-    private $indexMetadata;
-    private $hosts;
-    private $defaultIndex = false;
-
-    public function __construct(
-        string $namespace,
-        string $indexName,
-        string $alias,
-        array $indexMetadata = [],
-        array $hosts = [],
-        bool $defaultIndex = false
-    ) {
-        $this->namespace = $namespace;
-        $this->indexName = $indexName;
-        $this->alias = $alias;
-        $this->indexMetadata = $indexMetadata;
-        $this->hosts = $hosts;
-        $this->defaultIndex = $defaultIndex;
+    public function __construct(private string $namespace, private string $indexName, private string $alias, private array $indexMetadata = [], private array $hosts = [], private bool $defaultIndex = false)
+    {
     }
 
     public function getNamespace()

@@ -17,7 +17,7 @@ namespace ONGR\ElasticsearchBundle\Annotation;
  */
 final class Routing extends AbstractAnnotation implements MetaFieldInterface, PropertiesAwareInterface
 {
-    const NAME = '_routing';
+    const string NAME = '_routing';
 
     public function getName(): ?string
     {

@@ -32,18 +32,10 @@ class DocumentParser
     const OBJ_CACHED_FIELDS = 'ongr.obj_fields';
     const EMBEDDED_CACHED_FIELDS = 'ongr.embedded_fields';
     const ARRAY_CACHED_FIELDS = 'ongr.array_fields';
-
-    private $reader;
     private $properties = [];
-    private $analysisConfig = [];
-    private $cache;
 
-    public function __construct(Reader $reader, Cache $cache, array $analysisConfig = [])
+    public function __construct(private readonly Reader $reader, private readonly Cache $cache, private array $analysisConfig = [])
     {
-        $this->reader = $reader;
-        $this->cache = $cache;
-        $this->analysisConfig = $analysisConfig;
-
         #Fix for annotations loader until doctrine/annotations 2.0 will be released with the full autoload support.
         AnnotationRegistry::registerLoader('class_exists');
     }
@@ -88,7 +80,7 @@ class DocumentParser
         $settings = $document->getSettings();
         $settings['analysis'] = $this->getAnalysisConfig($class);
 
-        return array_filter(array_map('array_filter', [
+        return array_filter(array_map(array_filter(...), [
             'settings' => $settings,
             'mappings' => [
                 'properties' => array_filter($this->getClassMetadata($class))
@@ -139,18 +131,17 @@ class DocumentParser
             }
         }
 
-        //Embeded fields are option compared to the array or object mapping.
         if ($embeddedFields) {
-            $cacheItem = $this->cache->fetch(self::EMBEDDED_CACHED_FIELDS) ?? [];
+            $cacheItem = $this->cache->fetch(self::EMBEDDED_CACHED_FIELDS) ?: [];
             $cacheItem[$class->getName()] = $embeddedFields;
-            $t = $this->cache->save(self::EMBEDDED_CACHED_FIELDS, $cacheItem);
+            $this->cache->save(self::EMBEDDED_CACHED_FIELDS, $cacheItem);
         }
 
-        $cacheItem = $this->cache->fetch(self::ARRAY_CACHED_FIELDS) ?? [];
+        $cacheItem = $this->cache->fetch(self::ARRAY_CACHED_FIELDS) ?: [];
         $cacheItem[$class->getName()] = $arrayFields;
         $this->cache->save(self::ARRAY_CACHED_FIELDS, $cacheItem);
 
-        $cacheItem = $this->cache->fetch(self::OBJ_CACHED_FIELDS) ?? [];
+        $cacheItem = $this->cache->fetch(self::OBJ_CACHED_FIELDS) ?: [];
         $cacheItem[$class->getName()] = $objFields;
         $this->cache->save(self::OBJ_CACHED_FIELDS, $cacheItem);
 
@@ -264,16 +255,16 @@ class DocumentParser
             return $name;
         }
 
-        if ($class->hasMethod('get' . ucfirst($name))) {
-            return 'get' . ucfirst($name);
+        if ($class->hasMethod('get' . ucfirst((string) $name))) {
+            return 'get' . ucfirst((string) $name);
         }
 
-        if ($class->hasMethod('is' . ucfirst($name))) {
-            return 'is' . ucfirst($name);
+        if ($class->hasMethod('is' . ucfirst((string) $name))) {
+            return 'is' . ucfirst((string) $name);
         }
 
         // if there are underscores in the name convert them to CamelCase
-        if (strpos($name, '_')) {
+        if (strpos((string) $name, '_')) {
             $name = Caser::camel($name);
             if ($class->hasMethod('get' . ucfirst($name))) {
                 return 'get' . $name;
@@ -288,12 +279,12 @@ class DocumentParser
 
     protected function guessSetter(\ReflectionClass $class, $name): string
     {
-        if ($class->hasMethod('set' . ucfirst($name))) {
-            return 'set' . ucfirst($name);
+        if ($class->hasMethod('set' . ucfirst((string) $name))) {
+            return 'set' . ucfirst((string) $name);
         }
 
         // if there are underscores in the name convert them to CamelCase
-        if (strpos($name, '_')) {
+        if (strpos((string) $name, '_')) {
             $name = Caser::camel($name);
             if ($class->hasMethod('set' . ucfirst($name))) {
                 return 'set' . $name;

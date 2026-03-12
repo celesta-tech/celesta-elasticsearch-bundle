@@ -14,17 +14,12 @@ namespace ONGR\ElasticsearchBundle\Exception;
 class BulkWithErrorsException extends \Exception
 {
     /**
-     * @var array
-     */
-    protected $response;
-
-    /**
      * {@inheritdoc}
+     * @param mixed[] $response
      */
-    public function __construct($message = '', $code = 0, \Exception $previous = null, $response = [])
+    public function __construct($message = '', $code = 0, ?\Exception $previous = null, protected $response = [])
     {
         parent::__construct($message, $code, $previous);
-        $this->response = $response;
     }
 
     /**

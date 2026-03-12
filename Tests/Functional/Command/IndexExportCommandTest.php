@@ -20,6 +20,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class IndexExportCommandTest extends AbstractElasticsearchTestCase
 {
+    #[\Override]
     protected function getDataArray(): array
     {
         return [
@@ -88,9 +89,7 @@ class IndexExportCommandTest extends AbstractElasticsearchTestCase
         );
 
         $results = $this->parseResult(vfsStream::url('tmp/test.json'), count($expectedResults));
-        usort($results, function ($a, $b) {
-            return (int)$a['_id'] <=> (int)$b['_id'];
-        });
+        usort($results, fn($a, $b) => (int)$a['_id'] <=> (int)$b['_id']);
         $this->assertEquals($expectedResults, $results);
     }
 

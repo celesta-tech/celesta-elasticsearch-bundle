@@ -40,7 +40,7 @@ class Caser
     public static function snake($string)
     {
         $string = preg_replace('#([A-Z\d]+)([A-Z][a-z])#', '\1_\2', self::camel($string));
-        $string = preg_replace('#([a-z\d])([A-Z])#', '\1_\2', $string);
+        $string = preg_replace('#([a-z\d])([A-Z])#', '\1_\2', (string) $string);
 
         return strtolower(strtr($string, '-', '_'));
     }

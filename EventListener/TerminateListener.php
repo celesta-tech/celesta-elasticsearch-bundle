@@ -16,17 +16,12 @@ use Symfony\Component\DependencyInjection\Container;
 
 class TerminateListener
 {
-    private $container;
-    private $indexes;
-
     /**
      * @param Container      $container
      * @param IndexService[] $indexes
      */
-    public function __construct(Container $container, array $indexes)
+    public function __construct(private readonly Container $container, private readonly array $indexes)
     {
-        $this->container = $container;
-        $this->indexes = $indexes;
     }
 
     /**
@@ -34,7 +29,7 @@ class TerminateListener
      */
     public function onKernelTerminate()
     {
-        foreach ($this->indexes as $key => $index) {
+        foreach ($this->indexes as $index) {
             /** @var IndexService $index */
             $index = $this->container->get($index);
             $index->commit();

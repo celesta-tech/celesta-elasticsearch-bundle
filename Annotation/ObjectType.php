@@ -17,5 +17,5 @@ namespace ONGR\ElasticsearchBundle\Annotation;
  */
 final class ObjectType extends AbstractAnnotation
 {
-    const TYPE = 'object';
+    const string TYPE = 'object';
 }

@@ -18,6 +18,7 @@ use ONGR\ElasticsearchBundle\Test\AbstractElasticsearchTestCase;
 
 class GetDocumentSortTest extends AbstractElasticsearchTestCase
 {
+    #[\Override]
     protected function getDataArray(): array
     {
         return [

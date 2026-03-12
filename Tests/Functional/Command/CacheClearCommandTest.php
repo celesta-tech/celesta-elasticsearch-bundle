@@ -37,7 +37,7 @@ class CacheClearCommandTest extends AbstractElasticsearchTestCase
             ]
         );
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'Elasticsearch `'.DummyDocument::INDEX_NAME.'` index cache has been cleared.',
             $tester->getDisplay()
         );
@@ -46,11 +46,11 @@ class CacheClearCommandTest extends AbstractElasticsearchTestCase
 
     /**
      * Tests if exception is thown when no manager is found.
-     *
-     * @expectedException \RuntimeException
      */
     public function testExecuteException()
     {
+        $this->expectException(\RuntimeException::class);
+
         $app = new Application();
         $app->add($this->getCommand());
         $command = $app->find(CacheClearCommand::NAME);

@@ -21,6 +21,7 @@ class AggregationIteratorFindTest extends AbstractElasticsearchTestCase
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getDataArray(): array
     {
         return [

@@ -25,15 +25,11 @@ namespace ONGR\ElasticsearchBundle\Service\Json;
  */
 class JsonWriter
 {
-    private $filename;
     private $handle;
-    private $count;
     private $currentPosition = 0;
 
-    public function __construct(string $filename, int $count)
+    public function __construct(private readonly string $filename, private readonly int $count)
     {
-        $this->filename = $filename;
-        $this->count = $count;
     }
 
     /**

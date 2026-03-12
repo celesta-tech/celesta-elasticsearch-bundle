@@ -17,5 +17,5 @@ namespace ONGR\ElasticsearchBundle\Annotation;
  */
 final class Version extends AbstractAnnotation implements MetaFieldInterface
 {
-    const NAME = '_version';
+    const string NAME = '_version';
 }

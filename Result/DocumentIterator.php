@@ -15,6 +15,7 @@ use ONGR\ElasticsearchBundle\Result\Aggregation\AggregationValue;
 
 class DocumentIterator extends AbstractResultsIterator
 {
+    #[\Override]
     public function getAggregations()
     {
         $aggregations = [];
@@ -26,6 +27,7 @@ class DocumentIterator extends AbstractResultsIterator
         return $aggregations;
     }
 
+    #[\Override]
     public function getAggregation($name)
     {
         $aggregations = parent::getAggregations();

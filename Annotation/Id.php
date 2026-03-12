@@ -19,7 +19,7 @@ namespace ONGR\ElasticsearchBundle\Annotation;
  */
 final class Id extends AbstractAnnotation implements MetaFieldInterface, PropertiesAwareInterface
 {
-    const NAME = '_id';
+    const string NAME = '_id';
 
     public function getName(): ?string
     {

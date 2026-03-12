@@ -16,17 +16,12 @@ use Symfony\Contracts\EventDispatcher\Event;
 class PrePersistEvent extends Event
 {
     /**
-     * @var object
-     */
-    private $document;
-
-    /**
      * PrePersistEvent constructor.
      * @param $document
+     * @param object $document
      */
-    public function __construct($document)
+    public function __construct(private $document)
     {
-        $this->document = $document;
     }
 
     /**

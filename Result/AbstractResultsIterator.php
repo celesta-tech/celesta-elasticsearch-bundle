@@ -17,43 +17,35 @@ use ONGR\ElasticsearchBundle\Service\IndexService;
 abstract class AbstractResultsIterator implements \Countable, \Iterator
 {
     private $count = 0;
-    private $raw;
     private $scrollId;
     private $scrollDuration;
 
     protected $documents = [];
     private $aggregations = [];
 
-    private $converter;
-    private $index;
-
     //Used to count scroll iteration.
     private $key = 0;
 
     public function __construct(
-        array $rawData,
-        IndexService $index,
-        Converter $converter = null,
+        private array $raw,
+        private readonly IndexService $index,
+        private readonly ?\ONGR\ElasticsearchBundle\Mapping\Converter $converter = null,
         array $scroll = []
     ) {
-        $this->raw = $rawData;
-        $this->converter = $converter;
-        $this->index = $index;
-
         if (isset($scroll['_scroll_id']) && isset($scroll['duration'])) {
             $this->scrollId = $scroll['_scroll_id'];
             $this->scrollDuration = $scroll['duration'];
         }
 
-        if (isset($rawData['aggregations'])) {
-            $this->aggregations = &$rawData['aggregations'];
+        if (isset($this->raw['aggregations'])) {
+            $this->aggregations = &$this->raw['aggregations'];
         }
 
-        if (isset($rawData['hits']['hits'])) {
-            $this->documents = $rawData['hits']['hits'];
+        if (isset($this->raw['hits']['hits'])) {
+            $this->documents = $this->raw['hits']['hits'];
         }
-        if (isset($rawData['hits']['total']['value'])) {
-            $this->count = $rawData['hits']['total']['value'];
+        if (isset($this->raw['hits']['total']['value'])) {
+            $this->count = $this->raw['hits']['total']['value'];
         }
     }
 
@@ -90,10 +82,7 @@ abstract class AbstractResultsIterator implements \Countable, \Iterator
      */
     public function getAggregation($name)
     {
-        if (isset($this->aggregations[$name])) {
-            return $this->aggregations[$name];
-        }
-        return null;
+        return $this->aggregations[$name] ?? null;
     }
 
     /**

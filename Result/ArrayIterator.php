@@ -42,7 +42,7 @@ class ArrayIterator extends AbstractResultsIterator implements \ArrayAccess
         if (array_key_exists('_source', $raw)) {
             $doc = $raw['_source'];
         } elseif (array_key_exists('fields', $raw)) {
-            $doc = array_map('reset', $raw['fields']);
+            $doc = array_map(reset(...), $raw['fields']);
         }
 
         $doc['_id'] = $raw['_id'];

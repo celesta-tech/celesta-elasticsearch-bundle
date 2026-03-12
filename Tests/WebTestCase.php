@@ -3,6 +3,7 @@ namespace ONGR\ElasticsearchBundle\Tests;
 
 class WebTestCase extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
 {
+    #[\Override]
     public static function getKernelClass()
     {
         require_once __DIR__.'/app/AppKernel.php';

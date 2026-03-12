@@ -13,7 +13,7 @@ namespace ONGR\ElasticsearchBundle\Service;
 
 class IndexSuffixFinder
 {
-    public function getNextFreeIndex(IndexService $index, \DateTime $time = null): string
+    public function getNextFreeIndex(IndexService $index, ?\DateTime $time = null): string
     {
         if ($time === null) {
             $time = new \DateTime();
