@@ -42,7 +42,7 @@ jobs:
           extensions: uopz, amqp
           tools: composer, phpunit:9.5
         env:
-          runner: self-hosted
+          runner: ubuntu-latest
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PACKAGIST_TOKEN: ${{ secrets.CELESTA_COMPOSER_TOKEN }}
       - name: Setup Composer
