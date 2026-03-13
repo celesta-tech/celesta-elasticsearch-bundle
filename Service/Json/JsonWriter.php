@@ -59,11 +59,10 @@ class JsonWriter
      */
     public function finalize()
     {
-        $this->initialize();
-
-        if (is_resource($this->handle)) {
+        if ($this->handle !== null && is_resource($this->handle)) {
             fwrite($this->handle, "\n]");
             fclose($this->handle);
+            $this->handle = null;
         }
     }
 
