@@ -9,6 +9,8 @@ on:
       - v**
     branches:
       - master
+    paths-ignore:
+      - '.github/**'
 
 
 concurrency:

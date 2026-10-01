@@ -1,0 +1,6 @@
+# Code owners. GitHub applies the LAST pattern that matches a file.
+#
+# CI is owned by Team-O: a PR that changes it needs a Team-O approval.
+# Everything else has no code owner. The app team still merges.
+
+/.github/  @celesta-tech/team-o
