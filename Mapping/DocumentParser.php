@@ -22,7 +22,6 @@ use ONGR\ElasticsearchBundle\Annotation\NestedType;
 use ONGR\ElasticsearchBundle\Annotation\ObjectType;
 use ONGR\ElasticsearchBundle\Annotation\PropertiesAwareInterface;
 use ONGR\ElasticsearchBundle\Annotation\Property;
-use ONGR\ElasticsearchBundle\DependencyInjection\Configuration;
 
 /**
  * Document parser used for reading document annotations.
@@ -274,7 +273,7 @@ class DocumentParser
             }
         }
 
-        throw new \Exception("Could not determine a getter for `$name` of class `{$class->getNamespaceName()}`");
+        throw new \Exception("Could not determine a getter for `$name` of class `{$class->getName()}`");
     }
 
     protected function guessSetter(\ReflectionClass $class, $name): string
@@ -291,7 +290,7 @@ class DocumentParser
             }
         }
 
-        throw new \Exception("Could not determine a setter for `$name` of class `{$class->getNamespaceName()}`");
+        throw new \Exception("Could not determine a setter for `$name` of class `{$class->getName()}`");
     }
 
     private function getListFromArrayByKey(string $searchKey, array $array): array
@@ -337,7 +336,7 @@ class DocumentParser
 
     private function getDocumentPropertiesReflection(\ReflectionClass $class): array
     {
-        if (in_array($class->getName(), $this->properties)) {
+        if (isset($this->properties[$class->getName()])) {
             return $this->properties[$class->getName()];
         }
 

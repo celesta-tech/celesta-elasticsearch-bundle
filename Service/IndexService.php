@@ -13,6 +13,7 @@ namespace ONGR\ElasticsearchBundle\Service;
 
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
+use Elasticsearch\Common\Exceptions\Missing404Exception;
 use ONGR\ElasticsearchBundle\Event\BulkEvent;
 use ONGR\ElasticsearchBundle\Event\CommitEvent;
 use ONGR\ElasticsearchBundle\Event\Events;
@@ -21,12 +22,12 @@ use ONGR\ElasticsearchBundle\Exception\BulkWithErrorsException;
 use ONGR\ElasticsearchBundle\Mapping\Converter;
 use ONGR\ElasticsearchBundle\Mapping\IndexSettings;
 use ONGR\ElasticsearchBundle\Result\ArrayIterator;
+use ONGR\ElasticsearchBundle\Result\DocumentIterator;
 use ONGR\ElasticsearchBundle\Result\RawIterator;
 use ONGR\ElasticsearchDSL\Query\TermLevel\IdsQuery;
 use ONGR\ElasticsearchDSL\Query\TermLevel\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
-use ONGR\ElasticsearchBundle\Result\DocumentIterator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class IndexService
@@ -165,7 +166,9 @@ class IndexService
     }
 
     /**
-     * Returns a single document by provided ID or null if a document was not found.
+     * Returns a single document by provided ID, or null if it was not found and the request ignores 404.
+     *
+     * @throws Missing404Exception If the document was not found.
      */
     public function find($id, $params = [])
     {
@@ -372,9 +375,7 @@ class IndexService
             $requestParams = array_merge($requestParams, $params);
         }
 
-//        $this->stopwatch('start', 'search');
         $result = $this->getClient()->search($requestParams);
-//        $this->stopwatch('stop', 'search');
 
         return $result;
     }
@@ -406,14 +407,7 @@ class IndexService
             $this->bulkQueries[] = $data;
         }
 
-        $response = [];
-
-        // %X is not very accurate, but might be better than use counter. This place is experimental for now.
-        if ($autoCommit && $this->getBulkCommitSize() <= count($this->bulkQueries) % $this->getBulkCommitSize() / 2) {
-            $response = $this->commit();
-        }
-
-        return $response;
+        return [];
     }
 
     /**
@@ -439,8 +433,7 @@ class IndexService
                 Events::PRE_COMMIT
             );
 
-//            $this->stopwatch('start', 'bulk');
-            $bulkResponse = $this->client->bulk(
+            $bulkResponse = $this->getClient()->bulk(
                 array_merge(
                     [
                     'index' => $this->getIndexName(),
@@ -449,7 +442,6 @@ class IndexService
                     $params
                 )
             );
-//            $this->stopwatch('stop', 'bulk');
 
             if ($bulkResponse['errors']) {
                 throw new BulkWithErrorsException(
@@ -460,7 +452,6 @@ class IndexService
                 );
             }
 
-//            $this->stopwatch('start', 'refresh');
             switch ($commitMode) {
                 case 'flush':
                     $this->getClient()->indices()->flush();
@@ -479,8 +470,6 @@ class IndexService
             );
 
             $this->bulkQueries = [];
-
-//            $this->stopwatch('stop', $this->getCommitMode());
         }
 
         return $bulkResponse;
@@ -488,12 +477,12 @@ class IndexService
 
     public function flush(array $params = []): array
     {
-        return $this->client->indices()->flush(array_merge(['index' => $this->getIndexName()], $params));
+        return $this->getClient()->indices()->flush(array_merge(['index' => $this->getIndexName()], $params));
     }
 
     public function refresh(array $params = []): array
     {
-        return $this->client->indices()->refresh(array_merge(['index' => $this->getIndexName()], $params));
+        return $this->getClient()->indices()->refresh(array_merge(['index' => $this->getIndexName()], $params));
     }
 
     public function scroll($scrollId, $scrollDuration = '5m'): array
@@ -516,12 +505,5 @@ class IndexService
     public function clearElasticIndexCache(): array
     {
         return $this->getClient()->indices()->clearCache(['index' => $this->getIndexName()]);
-    }
-
-    private function stopwatch($action, $name): void
-    {
-        if ($this->stopwatch && ($action == 'start' || $action == 'stop')) {
-            $this->stopwatch->$action('ongr_es: '.$name, 'ongr_es');
-        }
     }
 }

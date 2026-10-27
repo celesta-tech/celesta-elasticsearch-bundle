@@ -6,3 +6,5 @@
 /phpunit.xml
 /composer.lock
 /coverage.clover
+/.idea/
+/.phpunit.result.cache

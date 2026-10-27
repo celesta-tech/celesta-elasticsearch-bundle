@@ -40,6 +40,7 @@ jobs:
         with:
           php-version: '8.4'
           extensions: uopz, amqp
+          coverage: pcov
           tools: composer, phpunit:9.5
         env:
           runner: ubuntu-latest
@@ -60,7 +61,12 @@ jobs:
         env:
           ELASTICSEARCH_HOST: localhost:9200
         run: |
-          vendor/phpunit/phpunit/phpunit
+          vendor/phpunit/phpunit/phpunit --coverage-clover=coverage.clover
+      - name: Coverage Code Check
+        uses: themichaelhall/check-code-coverage@v2
+        with:
+          report: coverage.clover
+          required-percentage: 100
   release:
     if: contains(needs.*.result, 'success') && (github.event.pull_request.head.ref || github.ref_name) == 'master' && github.event_name == 'push'
     uses: ./.github/workflows/release.yml

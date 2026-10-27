@@ -13,10 +13,10 @@ namespace ONGR\ElasticsearchBundle\Tests\Unit\Result;
 
 use ONGR\App\Document\DummyDocument;
 use ONGR\ElasticsearchBundle\Mapping\Converter;
+use ONGR\ElasticsearchBundle\Result\Aggregation\AggregationValue;
 use ONGR\ElasticsearchBundle\Result\DocumentIterator;
 use ONGR\ElasticsearchBundle\Service\IndexService;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Serializer\Serializer;
 
 class DocumentIteratorTest extends TestCase
 {
@@ -70,5 +70,19 @@ class DocumentIteratorTest extends TestCase
 
         $iterator = new DocumentIterator($rawData, $index, $converter);
         $this->assertEquals($document, $iterator->first());
+    }
+
+    public function testGetAggregationsWrapsEachAggregation(): void
+    {
+        $iterator = new DocumentIterator(
+            ['aggregations' => ['brands' => ['buckets' => []], 'avg_price' => ['value' => 10.5]]],
+            $this->createMock(IndexService::class)
+        );
+
+        $aggregations = $iterator->getAggregations();
+
+        self::assertSame(['brands', 'avg_price'], array_keys($aggregations));
+        self::assertContainsOnlyInstancesOf(AggregationValue::class, $aggregations);
+        self::assertSame(10.5, $aggregations['avg_price']->getValue('value'));
     }
 }
