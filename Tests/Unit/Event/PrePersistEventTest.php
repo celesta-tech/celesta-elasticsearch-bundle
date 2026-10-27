@@ -24,4 +24,14 @@ class PrePersistEventTest extends TestCase
 
         $this->assertInstanceOf(DummyDocument::class, $event->getDocument());
     }
+
+    public function testSetDocument(): void
+    {
+        $event = new PrePersistEvent(new DummyDocument());
+        $document = new DummyDocument();
+
+        $event->setDocument($document);
+
+        self::assertSame($document, $event->getDocument());
+    }
 }

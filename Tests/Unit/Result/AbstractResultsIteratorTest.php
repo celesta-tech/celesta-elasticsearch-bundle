@@ -113,4 +113,45 @@ class AbstractResultsIteratorTest extends TestCase
         $results = new RawIterator([], $index);
         $results->getDocumentScore();
     }
+
+    public function testGetDocumentSortOutsideIterationThrows(): void
+    {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Document sort is available only while iterating over results.');
+
+        (new RawIterator([], $this->createMock(IndexService::class)))->getDocumentSort();
+    }
+
+    public function testGetDocumentSortWithoutSortValues(): void
+    {
+        $iterator = new RawIterator(
+            ['hits' => ['total' => ['value' => 1], 'hits' => [['_id' => 'foo', '_source' => []]]]],
+            $this->createMock(IndexService::class)
+        );
+
+        self::assertNull($iterator->getDocumentSort());
+    }
+
+    public function testGetDocumentScoreWhileIterating(): void
+    {
+        $iterator = new RawIterator(
+            [
+                'hits' => [
+                    'total' => ['value' => 2],
+                    'hits' => [
+                        ['_id' => 'foo', '_score' => 2.0, '_source' => []],
+                        ['_id' => 'bar', '_score' => null, 'sort' => ['bar'], '_source' => []],
+                    ],
+                ],
+            ],
+            $this->createMock(IndexService::class)
+        );
+
+        $scores = [];
+        foreach ($iterator as $document) {
+            $scores[$document['_id']] = $iterator->getDocumentScore();
+        }
+
+        self::assertSame(['foo' => 2, 'bar' => null], $scores);
+    }
 }

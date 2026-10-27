@@ -37,4 +37,17 @@ class CommitEventTest extends TestCase
         $this->assertEquals('flush', $event->getCommitMode());
         $this->assertEquals($response, $event->getBulkResponse());
     }
+
+    public function testSetters(): void
+    {
+        $event = new CommitEvent('flush');
+
+        $event->setCommitMode('refresh')
+            ->setBulkQuery([['index' => ['_id' => 1]], ['title' => 'foo']])
+            ->setBulkResponse(['errors' => false]);
+
+        self::assertSame('refresh', $event->getCommitMode());
+        self::assertSame([['index' => ['_id' => 1]], ['title' => 'foo']], $event->getBulkQuery());
+        self::assertSame(['errors' => false], $event->getBulkResponse());
+    }
 }
