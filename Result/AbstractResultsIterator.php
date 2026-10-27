@@ -20,7 +20,7 @@ abstract class AbstractResultsIterator implements \Countable, \Iterator
     private $scrollId;
     private $scrollDuration;
 
-    protected $documents = [];
+    protected array $documents = [];
     private $aggregations = [];
 
     //Used to count scroll iteration.
@@ -127,10 +127,6 @@ abstract class AbstractResultsIterator implements \Countable, \Iterator
      */
     public function valid(): bool
     {
-        if (!isset($this->documents)) {
-            return false;
-        }
-
         $valid = $this->documentExists($this->key());
         if ($valid) {
             return true;

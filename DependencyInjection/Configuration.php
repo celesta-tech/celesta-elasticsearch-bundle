@@ -11,7 +11,6 @@
 
 namespace ONGR\ElasticsearchBundle\DependencyInjection;
 
-use Psr\Log\LogLevel;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -33,12 +32,7 @@ class Configuration implements ConfigurationInterface
 
         $treeBuilder = new TreeBuilder('ongr_elasticsearch');
 
-        if (method_exists($treeBuilder, 'getRootNode')) {
-            $rootNode = $treeBuilder->getRootNode();
-        } else {
-            // BC layer for symfony/config 4.1 and older
-            $rootNode = $treeBuilder->root('ongr_elasticsearch');
-        }
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
@@ -94,12 +88,7 @@ class Configuration implements ConfigurationInterface
     {
         $builder = new TreeBuilder('analysis');
 
-        if (method_exists($builder, 'getRootNode')) {
-            $node = $builder->getRootNode();
-        } else {
-            // BC layer for symfony/config 4.1 and older
-            $node = $builder->root('analysis');
-        }
+        $node = $builder->getRootNode();
 
 
         $node

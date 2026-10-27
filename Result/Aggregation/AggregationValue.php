@@ -117,12 +117,6 @@ class AggregationValue implements \ArrayAccess, \IteratorAggregate
 
     public function getIterator(): \ArrayIterator
     {
-        $buckets = $this->getBuckets();
-
-        if ($buckets === null) {
-            throw new \LogicException('Can not iterate over aggregation without buckets!');
-        }
-
         return new \ArrayIterator($this->getBuckets());
     }
 }

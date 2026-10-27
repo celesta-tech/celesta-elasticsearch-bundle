@@ -22,7 +22,6 @@ use ONGR\ElasticsearchBundle\Annotation\NestedType;
 use ONGR\ElasticsearchBundle\Annotation\ObjectType;
 use ONGR\ElasticsearchBundle\Annotation\PropertiesAwareInterface;
 use ONGR\ElasticsearchBundle\Annotation\Property;
-use ONGR\ElasticsearchBundle\DependencyInjection\Configuration;
 
 /**
  * Document parser used for reading document annotations.
