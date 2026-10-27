@@ -337,7 +337,7 @@ class DocumentParser
 
     private function getDocumentPropertiesReflection(\ReflectionClass $class): array
     {
-        if (in_array($class->getName(), $this->properties)) {
+        if (isset($this->properties[$class->getName()])) {
             return $this->properties[$class->getName()];
         }
 
