@@ -78,7 +78,6 @@ class JsonReaderTest extends TestCase
 
     public function testFileWithoutClosingBracket(): void
     {
-        // A real file: vfsStream reports end-of-file as soon as the last line is read, a real file only on the next read.
         $filename = tempnam(sys_get_temp_dir(), 'cls3893-reader-');
         file_put_contents($filename, "[\n{\"count\":1},\n{\"_id\":\"1\",\"_source\":{}}\n");
         $reader = new JsonReader($this->createMock(IndexService::class), $filename);

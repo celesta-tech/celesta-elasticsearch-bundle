@@ -166,7 +166,7 @@ class IndexService
     }
 
     /**
-     * Returns a single document by provided ID.
+     * Returns a single document by provided ID, or null if it was not found and the request ignores 404.
      *
      * @throws Missing404Exception If the document was not found.
      */
@@ -180,6 +180,10 @@ class IndexService
         $requestParams = array_merge($requestParams, $params);
 
         $result = $this->getClient()->get($requestParams);
+
+        if (!$result['found']) {
+            return null;
+        }
 
         $result['_source']['_id'] = $result['_id'];
 
@@ -429,7 +433,7 @@ class IndexService
                 Events::PRE_COMMIT
             );
 
-            $bulkResponse = $this->client->bulk(
+            $bulkResponse = $this->getClient()->bulk(
                 array_merge(
                     [
                     'index' => $this->getIndexName(),
@@ -473,12 +477,12 @@ class IndexService
 
     public function flush(array $params = []): array
     {
-        return $this->client->indices()->flush(array_merge(['index' => $this->getIndexName()], $params));
+        return $this->getClient()->indices()->flush(array_merge(['index' => $this->getIndexName()], $params));
     }
 
     public function refresh(array $params = []): array
     {
-        return $this->client->indices()->refresh(array_merge(['index' => $this->getIndexName()], $params));
+        return $this->getClient()->indices()->refresh(array_merge(['index' => $this->getIndexName()], $params));
     }
 
     public function scroll($scrollId, $scrollDuration = '5m'): array

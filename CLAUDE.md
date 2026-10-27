@@ -53,7 +53,7 @@ classmap). It is a fork of ONGR's bundle, published as `lancasters/elasticsearch
 - **`IndexService`:** one per index: search (`findBy`, `findDocuments`, `findArray`, `findRaw`, scrolling), counts,
   `update`/`remove`, and bulk writes. `bulk()` / `persist()` only queue operations; nothing reaches Elasticsearch until
   `commit()`, which throws `BulkWithErrorsException` when any item fails. `find()` throws
-  `Missing404Exception` for a missing ID (consumers rely on it).
+  `Missing404Exception` for a missing ID (consumers rely on it), or returns null when the request ignores 404.
 - **Results:** `DocumentIterator` (documents), `ArrayIterator` (arrays, `ArrayAccess`) and `RawIterator` (raw hits)
   share `AbstractResultsIterator`, which pages through scroll results and clears the scroll on destruct.
 - **Commands:** index create/drop/export/import and cache clear (`Command/`), backed by `ExportService` /

@@ -273,7 +273,7 @@ class DocumentParser
             }
         }
 
-        throw new \Exception("Could not determine a getter for `$name` of class `{$class->getNamespaceName()}`");
+        throw new \Exception("Could not determine a getter for `$name` of class `{$class->getName()}`");
     }
 
     protected function guessSetter(\ReflectionClass $class, $name): string
@@ -290,7 +290,7 @@ class DocumentParser
             }
         }
 
-        throw new \Exception("Could not determine a setter for `$name` of class `{$class->getNamespaceName()}`");
+        throw new \Exception("Could not determine a setter for `$name` of class `{$class->getName()}`");
     }
 
     private function getListFromArrayByKey(string $searchKey, array $array): array

@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class MappingPassTest extends TestCase
 {
-    private const string FIXTURE_DIR = '/Tests/Unit/DependencyInjection/Compiler/Fixture';
+    private const FIXTURE_DIR = '/Tests/Unit/DependencyInjection/Compiler/Fixture';
 
     public function testZeroSettingsAreKept(): void
     {
@@ -42,7 +42,7 @@ class MappingPassTest extends TestCase
     public function testOnlyOneIndexCanBeTheDefault(): void
     {
         $this->expectException(\RuntimeException::class);
-        // The directory iterator's file order depends on the filesystem, so either index can come first.
+        // File order depends on the filesystem.
         $this->expectExceptionMessageMatches(
             '/^Only one index can be set as default\. We found 2 indexes as default ones `(first|second)` and `(first|second)`$/'
         );

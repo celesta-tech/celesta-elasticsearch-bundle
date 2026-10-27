@@ -191,12 +191,12 @@ class DocumentParserTest extends TestCase
     {
         yield 'No getter' => [
             'class' => NoGetterDocument::class,
-            'expectedMessage' => 'Could not determine a getter for `lastName` of class `ONGR\ElasticsearchBundle\Tests\Unit\Mapping\Fixture\Parser`',
+            'expectedMessage' => 'Could not determine a getter for `lastName` of class `ONGR\ElasticsearchBundle\Tests\Unit\Mapping\Fixture\Parser\NoGetterDocument`',
         ];
 
         yield 'No setter' => [
             'class' => NoSetterDocument::class,
-            'expectedMessage' => 'Could not determine a setter for `lastName` of class `ONGR\ElasticsearchBundle\Tests\Unit\Mapping\Fixture\Parser`',
+            'expectedMessage' => 'Could not determine a setter for `lastName` of class `ONGR\ElasticsearchBundle\Tests\Unit\Mapping\Fixture\Parser\NoSetterDocument`',
         ];
     }
 

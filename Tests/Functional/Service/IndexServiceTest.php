@@ -159,12 +159,30 @@ class IndexServiceTest extends AbstractElasticsearchTestCase
         self::assertNotSame($client, $index->getClient());
     }
 
+    public function testCommitFlushAndRefreshAfterResetClient(): void
+    {
+        $index = $this->getIndex(DummyDocument::class);
+        $index->bulk('index', ['_id' => 7, 'title' => 'baz']);
+
+        $index->resetClient();
+        self::assertFalse($index->commit()['errors']);
+        $index->resetClient();
+        self::assertArrayHasKey('_shards', $index->flush());
+        $index->resetClient();
+        self::assertArrayHasKey('_shards', $index->refresh());
+    }
+
     public function testFindOfAMissingDocumentThrows(): void
     {
         $this->expectException(Missing404Exception::class);
         $this->expectExceptionMessage('"found":false');
 
         $this->getIndex(DummyDocument::class)->find(999);
+    }
+
+    public function testFindOfAMissingDocumentWithIgnored404ReturnsNull(): void
+    {
+        self::assertNull($this->getIndex(DummyDocument::class)->find(999, ['client' => ['ignore' => 404]]));
     }
 
     public function testFindByIds(): void
@@ -310,7 +328,6 @@ class IndexServiceTest extends AbstractElasticsearchTestCase
             $index->dropAndCreateIndex();
             self::fail('Expected a ServerErrorResponseException.');
         } catch (ServerErrorResponseException) {
-            // The index check failed and was ignored; the error comes from the create that followed it.
             self::assertSame(['HEAD /dummy', 'PUT /dummy'], $requests);
         }
     }
