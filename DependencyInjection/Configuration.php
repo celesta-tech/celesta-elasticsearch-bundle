@@ -90,7 +90,6 @@ class Configuration implements ConfigurationInterface
 
         $node = $builder->getRootNode();
 
-
         $node
             ->info('Defines analyzers, normalizers, tokenizers and filters')
             ->addDefaultsIfNotSet()
