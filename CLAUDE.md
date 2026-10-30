@@ -58,3 +58,7 @@ classmap). It is a fork of ONGR's bundle, published as `lancasters/elasticsearch
   share `AbstractResultsIterator`, which pages through scroll results and clears the scroll on destruct.
 - **Commands:** index create/drop/export/import and cache clear (`Command/`), backed by `ExportService` /
   `ImportService` and the `Json` reader/writer.
+
+## Specification and plan
+
+The specification of a change lives in its parent Jira ticket (project CLS). The plan of a sub-task lives in this repository as `.sdd/_plans/<KEY>.md`, on the branch named after the sub-task, and is reviewed in that branch's pull request.
