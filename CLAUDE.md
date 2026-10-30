@@ -26,6 +26,8 @@ vendor/bin/phpunit Tests/Unit/Mapping/ConverterTest.php
 php -d pcov.enabled=1 vendor/bin/phpunit --coverage-text
 ```
 
+CI (`.github/workflows/ci.yml`) runs the tests on PHP 8.4 with Elasticsearch 7.10.2 on an approved review and on every push to `master`. A merged pull request on `master` creates the next release once the tests pass (`.github/workflows/release.yml`, `v1.3` → `v1.4`). segment is the only consumer (`1.*` in its `composer.json`) and gets a release only when it updates its `composer.lock` (`v1.1` on 2026-10-30).
+
 ## Testing notes
 
 - PHPUnit 9 (`phpunit.xml.dist`, deprecated schema warning is expected). Warnings and notices are converted to
@@ -49,15 +51,22 @@ classmap). It is a fork of ONGR's bundle, published as `lancasters/elasticsearch
   classes); `Converter` uses the property metadata to turn documents into arrays and back.
 - **Wiring:** `MappingPass` scans `source_directories`, and for every `@ES\Index` class registers a public
   `IndexService` service whose id is the document class. `indexes` in the config overrides alias, hosts, default and
-  settings per class; only one index may be the default.
+  settings per class. `MappingPass` throws when two classes carry `@ES\Index(default=true)`; a `default` set under
+  `indexes` is not part of that check.
 - **`IndexService`:** one per index: search (`findBy`, `findDocuments`, `findArray`, `findRaw`, scrolling), counts,
   `update`/`remove`, and bulk writes. `bulk()` / `persist()` only queue operations; nothing reaches Elasticsearch until
   `commit()`, which throws `BulkWithErrorsException` when any item fails. `find()` throws
-  `Missing404Exception` for a missing ID (consumers rely on it), or returns null when the request ignores 404.
+  `Missing404Exception` for a missing ID (segment's tests rely on it), or returns null when the request ignores 404.
 - **Results:** `DocumentIterator` (documents), `ArrayIterator` (arrays, `ArrayAccess`) and `RawIterator` (raw hits)
   share `AbstractResultsIterator`, which pages through scroll results and clears the scroll on destruct.
 - **Commands:** index create/drop/export/import and cache clear (`Command/`), backed by `ExportService` /
   `ImportService` and the `Json` reader/writer.
+
+## Branches and commits
+
+- One sub-task per branch, named after the sub-task key: `CLS-1234`.
+- A commit message reads `CLS-1234: <what changed>`, in the imperative; a hotfix without a ticket reads `hotfix: <what changed>`. The pull request title starts with the same key, and its description links the sub-task.
+- `sdd-plan` and `sdd-implement` commit and push on the sub-task branch after a yes, as their steps say. Otherwise, stage the changes and leave the commit to the developer; commit or push only when asked.
 
 ## Specification and plan
 
