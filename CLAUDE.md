@@ -67,7 +67,3 @@ classmap). It is a fork of ONGR's bundle, published as `lancasters/elasticsearch
 - One sub-task per branch, named after the sub-task key: `CLS-1234`.
 - A commit message reads `CLS-1234: <what changed>`, in the imperative; a hotfix without a ticket reads `hotfix: <what changed>`. The pull request title starts with the same key, and its description links the sub-task.
 - `sdd-plan` and `sdd-implement` commit and push on the sub-task branch after a yes, as their steps say. Otherwise, stage the changes and leave the commit to the developer; commit or push only when asked.
-
-## Specification and plan
-
-The specification of a change lives in its parent Jira ticket (project CLS). The plan of a sub-task lives in this repository as `.sdd/_plans/<KEY>.md`, on the branch named after the sub-task, and is reviewed in that branch's pull request.

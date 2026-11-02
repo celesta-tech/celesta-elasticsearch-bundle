@@ -204,3 +204,6 @@ in the bundle `LICENSE` file.
 [15]: http://docs.ongr.io/ElasticsearchBundle/upgrade
 [16]: http://docs.ongr.io/ElasticsearchBundle/overwriting_bundle
 
+## Development process
+
+Specifications, plans and implementation follow Specification Driven Development through the engineering-playbook Claude Code plugin (`sdd-spec`, `sdd-split`, `sdd-plan`, `sdd-implement`). The repository's guidelines for it are in [CLAUDE.md](CLAUDE.md).
