@@ -26,7 +26,7 @@ vendor/bin/phpunit Tests/Unit/Mapping/ConverterTest.php
 php -d pcov.enabled=1 vendor/bin/phpunit --coverage-text
 ```
 
-CI (`.github/workflows/ci.yml`) runs the tests on PHP 8.4 with Elasticsearch 7.10.2 on an approved review and on every push to `master`. A merged pull request on `master` creates the next release once the tests pass (`.github/workflows/release.yml`, `v1.3` → `v1.4`). segment is the only consumer (`1.*` in its `composer.json`) and gets a release only when it updates its `composer.lock` (`v1.1` on 2026-10-30).
+CI (`.github/workflows/ci.yml`) runs the tests on PHP 8.4 with Elasticsearch 7.10.2 on an approved review, on every push to `master` and on a `v*` tag push. A merged pull request on `master` creates the next release once the tests pass (`.github/workflows/release.yml`, `v1.3` → `v1.4`). segment is the only consumer (`1.*` in its `composer.json`); its `composer.lock` is at `v1.1`, and it picks up a newer release only when that lock changes.
 
 ## Testing notes
 
@@ -66,4 +66,4 @@ classmap). It is a fork of ONGR's bundle, published as `lancasters/elasticsearch
 
 - One sub-task per branch, named after the sub-task key: `CLS-1234`.
 - A commit message reads `CLS-1234: <what changed>`, in the imperative; a hotfix without a ticket reads `hotfix: <what changed>`. The pull request title starts with the same key, and its description links the sub-task.
-- `sdd-plan` and `sdd-implement` commit and push on the sub-task branch after a yes, as their steps say. Otherwise, stage the changes and leave the commit to the developer; commit or push only when asked.
+- `sdd-plan` commits and pushes the plan after a yes; `sdd-implement` commits on the sub-task branch as it goes and pushes after a yes, as their steps say. Otherwise, stage the changes and leave the commit to the developer; commit or push only when asked.

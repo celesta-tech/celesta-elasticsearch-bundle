@@ -34,7 +34,7 @@ The documentation is in [`Resources/doc/`](Resources/doc/index.md):
 
 ## Setup the bundle
 
-#### Step 1: Install the bundle
+### Step 1: Install the bundle
 
 The package is on Celesta's private Packagist (`repo.packagist.com/lancastersolutions`).
 
@@ -54,7 +54,7 @@ return [
 ];
 ```
 
-#### (Optional) Step 2: Add configuration
+### (Optional) Step 2: Add configuration
 
 ```yaml
 # config/packages/ongr_elasticsearch.yaml
@@ -79,7 +79,7 @@ ongr_elasticsearch:
 
 See [configuration](Resources/doc/configuration.md) for every option.
 
-#### Step 3: Define your documents
+### Step 3: Define your documents
 
 Each document class maps one index. Create the `Product` class for the `products` index:
 
@@ -115,7 +115,7 @@ class Product
 
 See [mapping](Resources/doc/mapping.md) for more.
 
-#### Step 4: Create the index and its mapping
+### Step 4: Create the index and its mapping
 
 ```bash
 bin/console ongr:es:index:create
