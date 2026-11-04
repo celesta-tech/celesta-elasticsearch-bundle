@@ -12,6 +12,7 @@
 namespace ONGR\ElasticsearchBundle\Profiler\Handler;
 
 use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\LogRecord;
 
 /**
  * Handler that saves all records to him self.
@@ -26,7 +27,7 @@ class CollectionHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    protected function write(array $record): void
+    protected function write(array|LogRecord $record): void
     {
         $this->records[] = $record;
     }
