@@ -1,0 +1,6 @@
+# Code owners. GitHub applies the LAST pattern that matches a file.
+#
+# The owning team comes from the Notion "Team components" page.
+# Datadog reads this file to assign findings (vulnerabilities, errors) to that team.
+
+* @celesta-tech/team-c
