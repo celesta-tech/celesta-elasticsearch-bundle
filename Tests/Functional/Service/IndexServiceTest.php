@@ -220,6 +220,24 @@ class IndexServiceTest extends AbstractElasticsearchTestCase
         self::assertArrayHasKey('hits', $index->scroll($result->getRaw()['_scroll_id'], '1m'));
     }
 
+    public function testScrollIsClearedWhenTheResultIsReleased(): void
+    {
+        $index = $this->getIndex(DummyDocument::class);
+        $result = $index->findDocuments($index->createSearch()->setSize(1)->setScroll('1m'));
+
+        $ids = [];
+        foreach ($result as $document) {
+            $ids[] = $document->id;
+        }
+        sort($ids);
+        $scrollId = $result->getRaw()['_scroll_id'];
+        unset($result);
+
+        self::assertSame(['1', '2', '3'], $ids);
+        $this->expectException(Missing404Exception::class);
+        $index->scroll($scrollId, '1m');
+    }
+
     public function testFindRaw(): void
     {
         $index = $this->getIndex(DummyDocument::class);

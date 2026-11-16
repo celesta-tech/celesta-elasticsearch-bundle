@@ -19,13 +19,21 @@ jobs:
   tests:
     if: github.event.review.state == 'APPROVED' || github.event.pull_request.merged == true || github.event_name == 'push'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        search:
+          - docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+          - opensearchproject/opensearch:3.7.0
     services:
-      elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+      search:
+        image: ${{ matrix.search }}
         env:
           discovery.type: single-node
-          xpack.security.enabled: "false"
+          DISABLE_SECURITY_PLUGIN: "true"
+          DISABLE_INSTALL_DEMO_CONFIG: "true"
           ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+          OPENSEARCH_JAVA_OPTS: "-Xms512m -Xmx512m"
         ports:
           - 9200:9200
     steps:
@@ -50,7 +58,7 @@ jobs:
         uses: php-actions/composer@v6
         with:
           args: --ignore-platform-reqs
-      - name: Wait for Elasticsearch
+      - name: Wait for the search engine
         run: |
           until curl -s http://localhost:9200/_cluster/health; do
             echo "Waiting for Elasticsearch..."
