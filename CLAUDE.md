@@ -27,7 +27,7 @@ vendor/bin/phpunit Tests/Unit/Mapping/ConverterTest.php
 php -d pcov.enabled=1 vendor/bin/phpunit --coverage-text
 ```
 
-CI (`.github/workflows/ci.yml`) runs the tests on PHP 8.4 against Elasticsearch 7.10.2 and OpenSearch 3.7.0, one matrix leg each with the 100% coverage gate, on an approved review, on every push to `master` and on a `v*` tag push. Both legs share one service `env`: OpenSearch refuses `xpack.*` settings, and Elasticsearch 7.10.2 serves plain HTTP without them. The Elasticsearch leg stays until no environment runs Elasticsearch 7.10 ([CLS-541](https://celesta.atlassian.net/browse/CLS-541)). A merged pull request on `master` creates the next release once the tests pass (`.github/workflows/release.yml`, `v1.3` → `v1.4`). segment is the only consumer (`^1.5` in its `composer.json`); its `composer.lock` is at `v1.5`, and it picks up a newer release only when that lock changes.
+CI (`.github/workflows/ci.yml`) runs the tests on PHP 8.4 against Elasticsearch 7.10.2 and OpenSearch 3.7.0, one matrix leg each with the 100% coverage gate, on an approved review, on every push to `master` and on a `v*` tag push. Both legs share one service `env`: OpenSearch refuses `xpack.*` settings, and Elasticsearch 7.10.2 serves plain HTTP without them. The Elasticsearch leg stays until no environment runs Elasticsearch 7.10 ([CLS-541](https://celesta.atlassian.net/browse/CLS-541)). A merged pull request on `master` creates the next release once the tests pass (`.github/workflows/release.yml`, `v1.6` → `v1.7`). segment is the only consumer (`^1.5` in its `composer.json`); its `composer.lock` is at `v1.5`, and it picks up a newer release only when that lock changes.
 
 ## Testing notes
 

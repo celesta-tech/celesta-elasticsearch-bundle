@@ -61,7 +61,7 @@ jobs:
       - name: Wait for the search engine
         run: |
           until curl -s http://localhost:9200/_cluster/health; do
-            echo "Waiting for Elasticsearch..."
+            echo "Waiting for the search engine..."
             sleep 2
           done
       - name: Running PHPUnit Tests
