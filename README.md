@@ -15,7 +15,7 @@ Celesta's fork of [ONGR's Elasticsearch bundle][1] for Symfony, published as `la
 | Package | Version |
 | --- | --- |
 | PHP | ^8.1 |
-| Symfony | 5.0 to 7 |
+| Symfony | 5.4+, 6.4+, 7.4+ |
 | Elasticsearch | 7 (`elasticsearch/elasticsearch` ^7.17.2) |
 
 ## Documentation
