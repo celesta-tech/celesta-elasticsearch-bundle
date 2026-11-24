@@ -4,15 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-The repo has no Docker setup of its own. Functional tests need a reachable Elasticsearch 7.10 (CI starts one as a
-service container) at `ELASTICSEARCH_HOST`; without it they error out.
+The repo has no Docker setup of its own. Functional tests need a reachable search engine at `ELASTICSEARCH_HOST`, OpenSearch 3.7.0 or Elasticsearch 7.10.2 (CI runs the suite against both as service containers); without one they error out.
 
 ```bash
-# Elasticsearch + PHP 8.4 with PCOV, on one network
+# OpenSearch + PHP 8.4 with PCOV, on one network
 docker network create esb
-docker run -d --rm --name esb-es --network esb -e discovery.type=single-node -e xpack.security.enabled=false \
-  -e ES_JAVA_OPTS="-Xms512m -Xmx512m" docker.elastic.co/elasticsearch/elasticsearch:7.10.2
-docker run -d --name esb-php --network esb -v "$PWD":/app -w /app -e ELASTICSEARCH_HOST=esb-es:9200 php:8.4-cli sleep infinity
+docker run -d --rm --name esb-os --network esb -e discovery.type=single-node -e DISABLE_SECURITY_PLUGIN=true \
+  -e DISABLE_INSTALL_DEMO_CONFIG=true -e OPENSEARCH_JAVA_OPTS="-Xms512m -Xmx512m" opensearchproject/opensearch:3.7.0
+# Elasticsearch 7.10.2, CI's other leg, instead (then ELASTICSEARCH_HOST=esb-es:9200):
+# docker run -d --rm --name esb-es --network esb -e discovery.type=single-node -e ES_JAVA_OPTS="-Xms512m -Xmx512m" docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+docker run -d --name esb-php --network esb -v "$PWD":/app -w /app -e ELASTICSEARCH_HOST=esb-os:9200 php:8.4-cli sleep infinity
 # inside esb-php: install git/unzip, `pecl install pcov && docker-php-ext-enable pcov`, Composer, then
 composer install --ignore-platform-reqs
 
@@ -26,7 +27,7 @@ vendor/bin/phpunit Tests/Unit/Mapping/ConverterTest.php
 php -d pcov.enabled=1 vendor/bin/phpunit --coverage-text
 ```
 
-CI (`.github/workflows/ci.yml`) runs the tests on PHP 8.4 with Elasticsearch 7.10.2 on an approved review, on every push to `master` and on a `v*` tag push. A merged pull request on `master` creates the next release once the tests pass (`.github/workflows/release.yml`, `v1.3` → `v1.4`). segment is the only consumer (`1.*` in its `composer.json`); its `composer.lock` is at `v1.1`, and it picks up a newer release only when that lock changes.
+CI (`.github/workflows/ci.yml`) runs the tests on PHP 8.4 against Elasticsearch 7.10.2 and OpenSearch 3.7.0, one matrix leg each with the 100% coverage gate, on an approved review, on every push to `master` and on a `v*` tag push. Both legs share one service `env`: OpenSearch refuses `xpack.*` settings, and Elasticsearch 7.10.2 serves plain HTTP without them. The Elasticsearch leg stays until no environment runs Elasticsearch 7.10 ([CLS-541](https://celesta.atlassian.net/browse/CLS-541)). A merged pull request on `master` creates the next release once the tests pass (`.github/workflows/release.yml`, `v1.6` → `v1.7`). segment is the only consumer (`^1.5` in its `composer.json`); its `composer.lock` is at `v1.5`, and it picks up a newer release only when that lock changes.
 
 ## Testing notes
 
